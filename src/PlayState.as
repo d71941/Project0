@@ -36,19 +36,10 @@ package
 			//trace(FlxU.getAngle(enemy.getMidpoint(),player.getMidpoint()));
 			for each(var enemy:Enemy in enemys)
 			{
-				var angle:Number = FlxU.getAngle(enemy.getMidpoint(), player.getMidpoint()) - enemy.angle;
+				var distance:Number = FlxU.getDistance(enemy.getMidpoint(), player.getMidpoint());
+				var faceAngle:Number = enemy.faceTo(player);
 				
-				
-				if (angle > 0)
-				{
-					enemy.angularVelocity = 50;
-				}
-				else
-				{
-					enemy.angularVelocity = -50;
-				}
-				
-				if (FlxU.abs(angle))
+				if (FlxU.abs(faceAngle) < enemy.shootAngle && FlxU.abs(distance) < enemy.rangeLength)
 				{
 					enemy.fire(player);
 				}
