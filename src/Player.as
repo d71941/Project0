@@ -11,10 +11,8 @@ package
 			super(X, Y, ImgPlayer);
 		}
 		
-		public function hit(emitter:FlxEmitter):void
+		public function hit():void
 		{
-			emitter.at(this);
-			emitter.start(true, 0.5, 0, 0);
 		}
 	}
 

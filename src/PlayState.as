@@ -14,7 +14,7 @@ package
 			player.x = FlxG.width / 2 - player.width / 2;
 			player.y = FlxG.height / 2 - player.height / 2;
 			
-			enemys = new Array(new Enemy(200, 50, 0xffff0000), new Enemy(400, 150, 0xffffff4d), new Enemy(200, 300, 0xff00ff00), new Enemy(400, 400, 0xffff5cff));
+			enemys = new Array(new Enemy(570, 600, -90, 0xffff0000), new Enemy(400, 150, 90, 0xffffff4d), new Enemy(600, 300, -90, 0xff00ff00), new Enemy(400, 400, 90, 0xffff5cff));
 
 			var path:FlxPath = new FlxPath();
 			path.add(FlxG.width / 2, FlxG.height);
@@ -27,6 +27,7 @@ package
 			for each(var enemy:Enemy in enemys)
 			{
 				add(enemy.emitter);
+				add(enemy.spark);
 				add(enemy);
 			}
 		}
@@ -37,11 +38,21 @@ package
 			for each(var enemy:Enemy in enemys)
 			{
 				var distance:Number = FlxU.getDistance(enemy.getMidpoint(), player.getMidpoint());
-				var faceAngle:Number = enemy.faceTo(player);
+				var angleToPlayer:Number = FlxU.getAngle(enemy.getMidpoint(), player.getMidpoint());
 				
-				if (FlxU.abs(faceAngle) < enemy.shootAngle && FlxU.abs(distance) < enemy.rangeLength)
+				//trace(distance+' '+angleToPlayer);
+				
+				if ( FlxU.abs(distance) < enemy.aimRange)
 				{
-					enemy.fire(player);
+					enemy.faceTo(angleToPlayer);
+					if (FlxU.abs(angleToPlayer-enemy.angle) < enemy.shootAngle && FlxU.abs(distance) < enemy.shootRange)
+					{
+						enemy.fire(player);
+					}
+				}
+				else
+				{
+					enemy.faceTo(enemy.faceDirection);
 				}
 			}
 			
